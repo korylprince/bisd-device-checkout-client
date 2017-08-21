@@ -33,6 +33,6 @@ npm run lint
 (Of particular note)
 
 * [vue](https://vuejs.org/)
-* [vuetify](https://github.com/vuetifyjs/vuetify)
+* [vue-material](http://vuematerial.io)
 
 See package.json for all dependencies.
