@@ -15,7 +15,7 @@
             <md-input-container>
                 <md-icon>search</md-icon>
                 <label>Search</label>
-                <md-input v-model="search_raw"></md-input>
+                <md-input v-model="search" debounce="300"></md-input>
             </md-input-container>
             <md-list>
                 <md-list-item v-for="student in filtered_students" :key="student.other_id">
@@ -30,7 +30,6 @@
     </md-card>
 </template>
 <script>
-import debounce from "lodash/debounce";
 import api from "../js/api.js";
 export default {
     name: "search",
@@ -42,14 +41,6 @@ export default {
         };
     },
     computed: {
-        search_raw: {
-            get: function() {
-                return this.search;
-            },
-            set: debounce(function(val) {
-                this.search = val;
-            }, 500) // debounced ms
-        },
         filtered_students: function() {
             if (this.search === "") {
                 return [];
