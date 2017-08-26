@@ -15,7 +15,7 @@
             <md-input-container>
                 <md-icon>search</md-icon>
                 <label>Search</label>
-                <md-input v-model="search" debounce="300"></md-input>
+                <md-input v-model="search" :debounce="300"></md-input>
             </md-input-container>
             <md-list>
                 <md-list-item v-for="student in filtered_students" :key="student.other_id">
