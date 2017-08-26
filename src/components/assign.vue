@@ -21,6 +21,18 @@
                 <span>{{error}}</span>
             </div>
         </md-card-content>
+
+        <md-dialog ref="dialog">
+            <md-dialog-title>Student has Charge</md-dialog-title>
+
+            <md-dialog-content>Student {{student.first_name}} {{student.last_name}} ({{student.grade}}th Grade) has unpaid charges. Do you still want to assign them Bag Tag {{bag_tag}}?</md-dialog-content>
+
+            <md-dialog-actions>
+                <md-button class="md-primary" @click="back()">Go Back</md-button>
+                <md-button class="md-accent" @click="checkout(bag_tag, student, true)">Assign</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+
     </md-card>
 </template>
 <script>
@@ -43,10 +55,10 @@ export default {
         back: function() {
             this.$router.push({name: "search"});
         },
-        checkout: function(bag_tag, student) {
+        checkout: function(bag_tag, student, red_bag) {
             this.error = null;
 
-            var promise = api.checkoutDevice(this.bag_tag, this.student.other_id);
+            var promise = api.checkoutDevice(this.bag_tag, this.student.other_id, red_bag);
             promise.then(() => {
                 bus.$emit("saved");
                 this.back();
@@ -61,8 +73,13 @@ export default {
                 } else {
                     err = error;
                 }
+
                 console.error("Error checking out device: ", err);
-                this.error = err;
+                if (err.includes("unpaid charges")) {
+                    this.$refs.dialog.open();
+                } else {
+                    this.error = err;
+                }
             });
         }
     },

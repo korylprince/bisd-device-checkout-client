@@ -21,8 +21,8 @@ export default {
         this.handlePromise(promise);
         return promise;
     },
-    checkoutDevice: function(bagTag, userID) {
-        var promise = axios.post(API_BASE + "/devices/" + bagTag + "/checkout", {user_id: userID}, auth.config());
+    checkoutDevice: function(bag_tag, user_id, red_bag) {
+        var promise = axios.post(API_BASE + "/devices/" + bag_tag + "/checkout", {user_id: user_id, red_bag: red_bag}, auth.config());
         this.handlePromise(promise);
         return promise;
     }
