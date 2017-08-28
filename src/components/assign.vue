@@ -56,6 +56,8 @@ export default {
             this.$router.push({name: "search"});
         },
         checkout: function(bag_tag, student, red_bag) {
+            this.$refs.dialog.close();
+
             this.error = null;
 
             var promise = api.checkoutDevice(this.bag_tag, this.student.other_id, red_bag);
