@@ -32,7 +32,7 @@
                 <div v-if="status && status.links && status.links.length > 0">
                     <span v-if="status.link_type === 'charge'">Charges:</span>
                     <span v-if="status.link_type === 'device'">Devices:</span>
-                    <a style="padding: 10px" v-for="(link, index) in status.links" :key="link" :href="link">
+                    <a style="padding: 10px" v-for="(link, index) in status.links" :key="link" :href="link" target="_blank">
                         <span v-if="status.link_type === 'charge'">Charge</span>
                         <span v-if="status.link_type === 'device'">Device</span>
                         {{index + 1}}</a>
