@@ -15,7 +15,7 @@
             <md-list>
 
                 <md-list-item v-for="student in searched_students" :key="student.other_id">
-                    <span class="md-list-item-text">{{student.name}} (Grade {{student.grade}})</span>
+                    <span class="md-list-item-text">{{student.first_name}} {{student.last_name}} (Grade {{student.grade}})</span>
 
                     <md-button class="md-icon-button md-list-action" :to="{name: 'checkout', params: {other_id: student.other_id}}">
                         <md-icon class="md-primary">check_circle</md-icon>
@@ -48,7 +48,7 @@ export default {
 
             var students = []
             for (var i = 0; i < this.students.length; i++) {
-                if (this.students[i].name.toLowerCase().match(this.search.toLowerCase())) {
+                if ((this.students[i].first_name + this.students[i].last_name).toLowerCase().match(this.search.toLowerCase())) {
                     students.push(this.students[i])
                 }
                 if (students.length >= 10) {

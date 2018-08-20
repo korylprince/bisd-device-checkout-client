@@ -2,7 +2,7 @@
     <form novalidate @submit.prevent="do_checkout_device(other_id, bag_tag)">
         <md-card>
             <md-card-header>
-                <div class="md-title">Checkout: <span v-if="student">{{student.name}} (Grade {{student.grade}})</span></div>
+                <div class="md-title">Checkout: <span v-if="student">{{student.first_name}} {{student.last_name}} (Grade {{student.grade}})</span></div>
             </md-card-header>
 
             <md-card-content>
