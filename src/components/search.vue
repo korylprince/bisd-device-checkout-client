@@ -48,7 +48,7 @@ export default {
 
             var students = []
             for (var i = 0; i < this.students.length; i++) {
-                if ((this.students[i].first_name + this.students[i].last_name).toLowerCase().match(this.search.toLowerCase())) {
+                if ((this.students[i].first_name + " " + this.students[i].last_name).toLowerCase().match(this.search.toLowerCase())) {
                     students.push(this.students[i])
                 }
                 if (students.length >= 10) {
