@@ -195,18 +195,18 @@ const store = new Vuex.Store({
             context.commit("STOP_LOADING")
             return response.data
         },
-        async checkout_device(context, {other_id, bag_tag}) {
+        async checkout_device(context, {other_id, bag_tag, note}) {
             context.commit("START_LOADING")
 
             try {
-                await api.checkoutDevice(other_id, bag_tag)
+                await api.checkoutDevice(other_id, bag_tag, note)
             } catch (err) {
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
                     context.commit("ADD_FEEDBACK", "Session expired. Please sign back in to checkout device")
                     context.commit("UPDATE_NEXT_ROUTE", {name: "search"})
-                    context.commit("UPDATE_NEXT_DISPATCH", {action: "checkout_device", payload: {other_id, bag_tag}})
+                    context.commit("UPDATE_NEXT_DISPATCH", {action: "checkout_device", payload: {other_id, bag_tag, note}})
                 } else if (err.response !== null && err.response.status === 400 && err.response.data.description) {
                     console.error({err: err})
                     var desc = err.response.data.description

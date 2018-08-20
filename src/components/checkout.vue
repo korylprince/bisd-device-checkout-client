@@ -1,5 +1,5 @@
 <template>
-    <form novalidate @submit.prevent="do_checkout_device(other_id, bag_tag)">
+    <form novalidate @submit.prevent="do_checkout_device(other_id, bag_tag, note)">
         <md-card>
             <md-card-header>
                 <div class="md-title">Checkout: <span v-if="student">{{student.first_name}} {{student.last_name}} (Grade {{student.grade}})</span></div>
@@ -45,6 +45,11 @@
                     <span class="md-error">{{errors.first('bag tag')}}</span>
                 </md-field>
 
+                <md-field v-if="status && status['type'] !== 'none'">
+                    <label>Extra Notes</label>
+                    <md-textarea v-model="note"></md-textarea>
+                </md-field>
+
             </md-card-content>
 
             <md-card-actions>
@@ -84,6 +89,7 @@ export default {
     data() {
         return {
             bag_tag: "",
+            note: "",
             status: null,
             error_active: false,
             error_text: ""
@@ -111,11 +117,11 @@ export default {
                 }
             }, 500)
         },
-        async do_checkout_device(other_id, bag_tag) {
+        async do_checkout_device(other_id, bag_tag, note) {
             if (bag_tag.match(/^\d{4}$/) == null || (this.status && this.status["type"] === "none")) { return }
 
             try {
-                await this.checkout_device({other_id, bag_tag})
+                await this.checkout_device({other_id, bag_tag, note})
             } catch (err) {
                 this.error_text = err.message
                 this.error_active = true
