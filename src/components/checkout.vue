@@ -18,7 +18,7 @@
                     v-if="status && status['type'] === 'red_bag'"
                     md-icon="computer"
                     md-label="Red Bag"
-                    :md-description="status.reason">
+                    :md-description="reason">
                 </md-empty-state>
 
                 <md-empty-state
@@ -26,16 +26,21 @@
                     v-if="status && status['type'] === 'none'"
                     md-icon="close"
                     md-label="No Chromebook"
-                    :md-description="status.reason">
+                    :md-description="reason">
                 </md-empty-state>
 
-                <div v-if="status && status.links && status.links.length > 0">
-                    <span v-if="status.link_type === 'charge'">Charges:</span>
-                    <span v-if="status.link_type === 'device'">Devices:</span>
-                    <a style="padding: 10px" v-for="(link, index) in status.links" :key="link" :href="link" target="_blank">
-                        <span v-if="status.link_type === 'charge'">Charge</span>
-                        <span v-if="status.link_type === 'device'">Device</span>
-                        {{index + 1}}</a>
+                <div v-if="devices && devices.length > 0">
+                    <strong>Devices:</strong>
+                    <span v-for="device, index in devices" :key="device.link">
+                        <a style="padding: 10px" :href="device.link" target="_blank">Device {{index + 1}}</a>
+                    </span>
+                </div>
+
+                <div v-if="charges && charges.length > 0">
+                    <strong>Charges:</strong>
+                    <span v-for="charge, index in charges" :key="charge.link">
+                        <a style="padding: 10px" :href="charge.link" target="_blank">Charge {{index + 1}} - ${{charge.link_value}}</a>
+                    </span>
                 </div>
 
                 <md-field :class="{'md-invalid': errors.has('bag tag')}"
@@ -100,6 +105,34 @@ export default {
         ...mapGetters(["is_loading"]),
         student() {
             return this.students[this.students.findIndex(student => student.other_id === this.other_id)]
+        },
+        reason() {
+            if (this.status == null || this.status.issues == null || this.status.issues.length === 0) { return null }
+            return this.status.issues[0].description
+        },
+        devices() {
+            if (this.status == null || this.status.issues == null) { return null }
+
+            var devices = []
+            for (var issue of this.status.issues) {
+                if (issue.link_type === "device") {
+                    devices.push(issue)
+                }
+            }
+
+            return devices
+        },
+        charges() {
+            if (this.status == null || this.status.issues == null) { return null }
+
+            var charges = []
+            for (var issue of this.status.issues) {
+                if (issue.link_type === "charge") {
+                    charges.push(issue)
+                }
+            }
+
+            return charges
         }
     },
     watch: {

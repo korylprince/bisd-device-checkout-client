@@ -11,7 +11,7 @@ WORKDIR /client
 
 RUN npm install
 
-RUN API_BASE="/checkout/api/1.3" npm run build-prod
+RUN API_BASE="/checkout/api/1.4" npm run build-prod
 
 FROM alpine:3.8
 
