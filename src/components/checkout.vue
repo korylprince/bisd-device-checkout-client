@@ -13,6 +13,7 @@
           >
           <md-avatar class="md-avatar-icon md-accent md-small" v-if="student.fee_forgiveness" style="float:right">
             <md-icon>money_off</md-icon>
+            <md-tooltip md-direction="bottom">Student is eligible for fee forgiveness</md-tooltip>
           </md-avatar>
         </div>
       </md-card-header>
