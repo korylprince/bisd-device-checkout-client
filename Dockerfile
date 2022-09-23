@@ -1,4 +1,4 @@
-FROM alpine:3.8 as builder
+FROM alpine:3.16 as builder
 
 ARG VERSION
 
@@ -11,9 +11,9 @@ WORKDIR /client
 
 RUN npm install
 
-RUN API_BASE="/checkout/api/1.4" npm run build-prod
+RUN VITE_API_BASE="/checkout/api/1.4" npm run build
 
-FROM alpine:3.8
+FROM alpine:3.16
 
 RUN apk add --no-cache caddy
 
@@ -21,6 +21,6 @@ COPY --from=builder /client/dist /www
 
 WORKDIR /www
 
-RUN echo ":8080" > /Caddyfile && echo "log /dev/stdout" >> /Caddyfile
+COPY Caddyfile /
 
-CMD ["caddy", "-conf", "/Caddyfile"]
+CMD ["caddy", "run", "--config", "/Caddyfile"]
