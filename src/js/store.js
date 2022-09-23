@@ -20,7 +20,7 @@ const store = new Vuex.Store({
         _next_dispatch_payload: null,
         _feedback: [],
         _feedback_delay: false,
-        students: []
+        students: [],
     },
     getters: {
         is_loading(state) {
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
                 name: state._next_route.name,
                 path: state._next_route.path,
                 params: state._next_route.params,
-                query: state._next_route.query
+                query: state._next_route.query,
             }
         },
         signed_in(state) {
@@ -45,13 +45,15 @@ const store = new Vuex.Store({
         },
         $http(state) {
             return axios.create({
-                headers: {Authorization: "Session id=\"" + state.session_id + "\""}
+                headers: {Authorization: "Session id=\"" + state.session_id + "\""},
             })
         },
         current_feedback(state) {
-            if (state._feedback_delay || state._feedback.length === 0) { return null }
+            if (state._feedback_delay || state._feedback.length === 0) {
+                return null
+            }
             return state._feedback[0]
-        }
+        },
     },
     mutations: {
         UPDATE_ERROR(state, error) {
@@ -102,7 +104,7 @@ const store = new Vuex.Store({
         },
         UPDATE_STUDENTS(state, students) {
             state.students = students
-        }
+        },
     },
     actions: {
         async authenticate(context, {username, password}) {
@@ -116,7 +118,10 @@ const store = new Vuex.Store({
                     context.commit("UPDATE_ERROR", "Wrong username or password")
                     return
                 }
-                context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
+                context.commit(
+                    "UPDATE_ERROR",
+                    "Oops! Something bad happened. Contact your system administrator"
+                )
                 console.error({error: err})
                 return
             }
@@ -125,7 +130,7 @@ const store = new Vuex.Store({
             context.commit("UPDATE_CREDENTIALS", {
                 username: response.data.user.username,
                 display_name: response.data.user.display_name,
-                session_id: response.data.session_id
+                session_id: response.data.session_id,
             })
         },
         async signout(context) {
@@ -140,9 +145,14 @@ const store = new Vuex.Store({
             context.commit("UPDATE_NEXT_ROUTE", null)
         },
         async next_dispatch(context) {
-            if (context.state._next_dispatch_action == null) { return }
+            if (context.state._next_dispatch_action == null) {
+                return
+            }
             try {
-                await context.dispatch(context.state._next_dispatch_action, context.state._next_dispatch_payload)
+                await context.dispatch(
+                    context.state._next_dispatch_action,
+                    context.state._next_dispatch_payload
+                )
             } catch (err) {}
             context.commit("UPDATE_NEXT_DISPATCH", {action: null, payload: null})
         },
@@ -161,10 +171,16 @@ const store = new Vuex.Store({
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
-                    context.commit("ADD_FEEDBACK", "Session expired. Please sign back in")
+                    context.commit(
+                        "ADD_FEEDBACK",
+                        "Session expired. Please sign back in"
+                    )
                     context.commit("UPDATE_NEXT_DISPATCH", {action: "get_students"})
                 } else {
-                    context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
+                    context.commit(
+                        "UPDATE_ERROR",
+                        "Oops! Something bad happened. Contact your system administrator"
+                    )
                     console.error({err: err})
                 }
                 return
@@ -182,11 +198,23 @@ const store = new Vuex.Store({
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
-                    context.commit("ADD_FEEDBACK", "Session expired. Please sign back in")
-                    context.commit("UPDATE_NEXT_ROUTE", {name: "checkout", params: {other_id: other_id}})
-                    context.commit("UPDATE_NEXT_DISPATCH", {action: "get_student_status", payload: other_id})
+                    context.commit(
+                        "ADD_FEEDBACK",
+                        "Session expired. Please sign back in"
+                    )
+                    context.commit("UPDATE_NEXT_ROUTE", {
+                        name: "checkout",
+                        params: {other_id: other_id},
+                    })
+                    context.commit("UPDATE_NEXT_DISPATCH", {
+                        action: "get_student_status",
+                        payload: other_id,
+                    })
                 } else {
-                    context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
+                    context.commit(
+                        "UPDATE_ERROR",
+                        "Oops! Something bad happened. Contact your system administrator"
+                    )
                     console.error({err: err})
                 }
                 return null
@@ -204,10 +232,20 @@ const store = new Vuex.Store({
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
-                    context.commit("ADD_FEEDBACK", "Session expired. Please sign back in to checkout device")
+                    context.commit(
+                        "ADD_FEEDBACK",
+                        "Session expired. Please sign back in to checkout device"
+                    )
                     context.commit("UPDATE_NEXT_ROUTE", {name: "search"})
-                    context.commit("UPDATE_NEXT_DISPATCH", {action: "checkout_device", payload: {other_id, bag_tag, note}})
-                } else if (err.response !== null && err.response.status === 400 && err.response.data.description) {
+                    context.commit("UPDATE_NEXT_DISPATCH", {
+                        action: "checkout_device",
+                        payload: {other_id, bag_tag, note},
+                    })
+                } else if (
+                    err.response !== null &&
+          err.response.status === 400 &&
+          err.response.data.description
+                ) {
                     console.error({err: err})
                     var desc = err.response.data.description
                     if (desc.startsWith("Client Error: ")) {
@@ -216,7 +254,10 @@ const store = new Vuex.Store({
                         throw Error(desc)
                     }
                 } else {
-                    context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
+                    context.commit(
+                        "UPDATE_ERROR",
+                        "Oops! Something bad happened. Contact your system administrator"
+                    )
                     console.error({err: err})
                 }
                 return
@@ -224,8 +265,8 @@ const store = new Vuex.Store({
 
             context.commit("ADD_FEEDBACK", "Device checked out")
             context.commit("STOP_LOADING")
-        }
-    }
+        },
+    },
 })
 
 export default store

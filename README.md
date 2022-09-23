@@ -13,13 +13,13 @@ npm install
 # Development
 
 ```
-API_SERVER="http://localhost:8080" API_BASE="<api_location>" npm run dev-server
+API_SERVER="http://localhost:8080" VITE_API_BASE="<api_location>" npm run dev
 ```
 
 # Build for Production
 
 ```
-API_BASE="<api_location>" npm run build-prod
+VITE_API_BASE="<api_location>" npm run build
 ```
 
 # Linting

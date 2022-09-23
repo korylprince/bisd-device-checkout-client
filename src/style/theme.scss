@@ -1,4 +1,4 @@
-@import "~vue-material/dist/theme/engine";
+@import "node_modules/vue-material/dist/theme/engine";
 
 @include md-register-theme("default", (
   primary: md-get-palette-color(blue, A200),
@@ -10,4 +10,4 @@
     @include md-theme-property-by-hue(color, red, A400, field, error);
 }
 
-@import "~vue-material/dist/theme/all";
+@import "node_modules/vue-material/dist/theme/all";

@@ -13,15 +13,18 @@ import router from "./js/router.js"
 import store from "./js/store.js"
 
 // signin/signout actions
-store.watch((state, getters) => getters.signed_in, signed_in => {
-    if (!signed_in) {
-        router.push({name: "signin"})
-    } else {
-        store.dispatch("next_route", router)
-        store.dispatch("next_dispatch")
-        store.dispatch("get_students")
+store.watch(
+    (state, getters) => getters.signed_in,
+    signed_in => {
+        if (!signed_in) {
+            router.push({name: "signin"})
+        } else {
+            store.dispatch("next_route", router)
+            store.dispatch("next_dispatch")
+            store.dispatch("get_students")
+        }
     }
-})
+)
 
 // fetch data if signed in at load
 if (store.getters.signed_in) {
@@ -31,9 +34,9 @@ if (store.getters.signed_in) {
 import AppMain from "./components/app.vue"
 
 var App = new (Vue.extend(AppMain))({
-    el: "#root",
+    el: "#app",
     router,
-    store
+    store,
 })
 
 export default App
