@@ -11,6 +11,10 @@
             >{{ student.first_name }} {{ student.last_name }} (Grade
             {{ student.grade }})</span
           >
+          <md-avatar class="md-avatar-icon md-accent md-small" v-if="student.fee_forgiveness" style="float:right">
+            <md-icon>money_off</md-icon>
+          </md-avatar>
+        </div>
       </md-card-header>
 
       <md-card-content>
